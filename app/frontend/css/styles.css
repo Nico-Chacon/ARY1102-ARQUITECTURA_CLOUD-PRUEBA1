@@ -1,0 +1,31 @@
+/* FreshBox SpA - Estilos CSS - EP1 */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f7f0; color: #333; line-height: 1.6; }
+header { background: #2d6a4f; color: white; padding: 20px; text-align: center; }
+header h1 { font-size: 2em; }
+header p { opacity: 0.8; font-size: 0.9em; }
+main { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+section { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+h2 { color: #2d6a4f; margin-bottom: 15px; border-bottom: 2px solid #52b788; padding-bottom: 8px; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #ddd; }
+th { background: #52b788; color: white; }
+tr:hover { background: #f0f7f0; }
+button { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9em; margin: 2px; }
+#btn-cargar { background: #52b788; color: white; margin-bottom: 10px; }
+#btn-guardar { background: #2d6a4f; color: white; }
+button[onclick="cancelarEdicion()"] { background: #95a5a6; color: white; }
+.btn-editar { background: #f39c12; color: white; }
+.btn-eliminar { background: #e74c3c; color: white; }
+button:hover { opacity: 0.85; }
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; margin-bottom: 4px; font-weight: 600; color: #555; }
+.form-group input, .form-group textarea { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; }
+.form-group input:focus, .form-group textarea:focus { outline: none; border-color: #52b788; }
+.form-actions { margin-top: 15px; }
+#mensaje { margin-top: 10px; padding: 8px; border-radius: 4px; }
+.mensaje-exito { background: #d4edda; color: #155724; }
+.mensaje-error { background: #f8d7da; color: #721c24; }
+footer { text-align: center; padding: 15px; background: #2d6a4f; color: white; margin-top: 30px; font-size: 0.85em; }
+
+/* 2026 - Disenador asignatura: Ignacio A. Pastenet M. */

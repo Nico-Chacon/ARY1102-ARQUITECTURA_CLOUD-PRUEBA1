@@ -1,0 +1,91 @@
+name: "Terraform Apply"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.tf'
+      - '**/*.tfvars'
+      - '**/.terraform.lock.hcl'
+      - 'app/**'
+  workflow_dispatch:
+
+env:
+  TF_VAR_email_sns:           ${{ secrets.EMAIL_SNS }}
+  TF_VAR_db_root_password:    ${{ secrets.DB_ROOT_PASSWORD }}
+  TF_VAR_db_password:         ${{ secrets.DB_PASSWORD }}
+  TF_VAR_owner_name:          ${{ secrets.OWNER_NAME }}
+  TF_VAR_backup_iam_role_arn: ${{ secrets.BACKUP_IAM_ROLE_ARN }}
+  PROJECT_NAME: chacon-freshbox
+  AWS_REGION: us-east-1
+
+jobs:
+  apply:
+    name: "Terraform Apply"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS Credentials (AWS Academy Learner Lab)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
+      - name: Terraform Init
+        working-directory: ./environments/dev
+        run: terraform init -input=false
+
+      - name: Terraform Validate
+        working-directory: ./environments/dev
+        run: terraform validate
+
+      - name: Terraform Format Check
+        working-directory: ./environments/dev
+        continue-on-error: true
+        run: terraform fmt -check -recursive
+
+      # 1) Crear primero solo los 5 repos ECR (necesarios para poder
+      #    hacer push de las imagenes antes del resto del apply)
+      - name: Create ECR repositories
+        working-directory: ./environments/dev
+        run: terraform apply -auto-approve -target=module.ecr
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 2) Build + push de las 5 imagenes (frontend + 4 microservicios)
+      - name: Build & Push Docker Images
+        working-directory: ./app
+        run: |
+          chmod +x build-and-push.sh
+          ./build-and-push.sh
+
+      - name: Wait for ECR propagation
+        run: sleep 20
+
+      # 3) Desplegar el resto: red, EC2 MySQL, ALB, ASG (App ya con
+      #    imagenes en ECR), monitoreo, budgets, cloudtrail, backup
+      - name: Terraform Plan
+        working-directory: ./environments/dev
+        run: terraform plan -input=false -out=tfplan
+
+      - name: Terraform Apply
+        working-directory: ./environments/dev
+        run: terraform apply -auto-approve tfplan
+
+      - name: Refrescar instancias del ASG (App)
+        continue-on-error: true
+        run: |
+          aws autoscaling start-instance-refresh \
+            --auto-scaling-group-name chacon-freshbox-asg \
+            --preferences '{"MinHealthyPercentage":50,"InstanceWarmup":120}'

@@ -1,0 +1,31 @@
+aws_region   = "us-east-1"
+project_name = "chacon-freshbox"
+owner_name   = "Chacon"
+vpc_cidr     = "10.0.0.0/22"
+
+# Opcional: deja vacio para usar Amazon Linux 2023 ARM64 mas reciente
+ami_id = ""
+
+# Opcional: crea el Key Pair en la consola AWS si quieres SSH de respaldo
+key_name = "chacon-freshbox-key"
+
+instance_type = "t4g.small"
+
+# REEMPLAZAR: passwords de MySQL (minimo 8 caracteres)
+db_root_password = "CambiaEstaPasswordRoot123!"
+db_password       = "CambiaEstaPasswordApp123!"
+
+# Deben coincidir con app/db/init.sql
+db_name     = "freshbox"
+db_username = "alumno"
+
+# Tu correo para notificaciones SNS (Budgets + CloudWatch)
+email_sns = "tu_correo@duocuc.cl"
+
+# ARN del LabRole de tu cuenta AWS Academy (para AWS Backup).
+# Formato: arn:aws:iam::<ACCOUNT_ID>:role/LabRole
+backup_iam_role_arn = ""
+
+monthly_budget_usd = "100"
+ec2_budget_usd     = "60"
+enable_budgets     = true
