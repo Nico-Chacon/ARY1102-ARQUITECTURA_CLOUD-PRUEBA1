@@ -94,9 +94,9 @@ jobs:
         working-directory: ./environments/dev
         run: terraform apply -auto-approve tfplan
 
-      - name: Refrescar instancias del ASG (App)
-        continue-on-error: true
-        run: |
-          aws autoscaling start-instance-refresh \
-            --auto-scaling-group-name chacon-freshbox-asg \
-            --preferences '{"MinHealthyPercentage":50,"InstanceWarmup":120}'
+#      - name: Refrescar instancias del ASG (App)
+#        continue-on-error: true
+#        run: |
+#          aws autoscaling start-instance-refresh \
+#            --auto-scaling-group-name chacon-freshbox-asg \
+#            --preferences '{"MinHealthyPercentage":50,"InstanceWarmup":120}'

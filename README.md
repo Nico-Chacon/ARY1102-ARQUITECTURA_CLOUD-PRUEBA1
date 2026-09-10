@@ -14,6 +14,8 @@ reemplaza la app, se reemplaza RDS por una EC2 dedicada con MySQL (según lo
 exige el enunciado EP1), se generaliza ECR a 5 repositorios y se corrige el
 despliegue de las EC2 App a subredes realmente privadas.
 
+## Diagrama de la infraestructura
+![Diagrama](media/Diagrama.png)
 ## Módulos incluidos
 
 | Módulo       | Descripción                                                          |
