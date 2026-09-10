@@ -146,12 +146,12 @@ module "budgets" {
 # ----------------------------------------------------------
 # CloudTrail — auditoria y trazabilidad
 # ----------------------------------------------------------
-module "cloudtrail" {
-  source       = "../../modules/cloudtrail"
-  project_name = var.project_name
-  account_id   = data.aws_caller_identity.current.account_id
-  common_tags  = local.common_tags
-}
+#module "cloudtrail" {
+#  source       = "../../modules/cloudtrail"
+#  project_name = var.project_name
+#  account_id   = data.aws_caller_identity.current.account_id
+#  common_tags  = local.common_tags
+#}
 
 # NOTA: el modulo "governance" (roles/politicas IAM propios) NO se incluye
 # porque AWS Academy bloquea iam:CreateRole/CreatePolicy para el usuario

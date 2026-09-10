@@ -25,7 +25,7 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_subnet" "public" {
   count                   = 2
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = cidrsubnet(var.vpc_cidr, 8, count.index)
+  cidr_block              = cidrsubnet(var.vpc_cidr, 4, count.index)
   availability_zone       = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = true
   tags = merge(var.common_tags, {
@@ -38,7 +38,7 @@ resource "aws_subnet" "public" {
 resource "aws_subnet" "private_app" {
   count             = 2
   vpc_id            = aws_vpc.main.id
-  cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index + 10)
+  cidr_block        = cidrsubnet(var.vpc_cidr, 4, count.index + 2)
   availability_zone = data.aws_availability_zones.available.names[count.index]
   tags = merge(var.common_tags, {
     Name = "${var.project_name}-private-app-${count.index + 1}"
@@ -50,7 +50,7 @@ resource "aws_subnet" "private_app" {
 resource "aws_subnet" "private_data" {
   count             = 2
   vpc_id            = aws_vpc.main.id
-  cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index + 20)
+  cidr_block        = cidrsubnet(var.vpc_cidr, 4, count.index + 4)
   availability_zone = data.aws_availability_zones.available.names[count.index]
   tags = merge(var.common_tags, {
     Name = "${var.project_name}-private-data-${count.index + 1}"

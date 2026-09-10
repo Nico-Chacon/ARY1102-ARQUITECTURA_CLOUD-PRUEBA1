@@ -20,10 +20,6 @@ output "sns_topic_arn" {
   value = module.monitoring.sns_topic_arn
 }
 
-output "cloudtrail_bucket" {
-  value = module.cloudtrail.log_bucket_name
-}
-
 output "ecr_repo_urls" {
   description = "URLs de los 5 repositorios ECR (para docker push)"
   value       = module.ecr.repo_urls
