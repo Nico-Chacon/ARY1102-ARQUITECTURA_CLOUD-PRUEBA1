@@ -62,7 +62,18 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & Push Docker Images
+        working-directory: ./app
+        run: |
+          chmod +x build-and-push.sh
+          ./build-and-push.sh
+          
       # 2) Build + push de las 5 imagenes (frontend + 4 microservicios)
       - name: Build & Push Docker Images
         working-directory: ./app

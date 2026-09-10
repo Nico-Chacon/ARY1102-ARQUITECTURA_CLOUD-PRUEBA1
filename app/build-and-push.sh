@@ -27,10 +27,12 @@ build_and_push () {
   local repo_name="${PROJECT_NAME}-${repo_suffix}"
   local repo_url="$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/${repo_name}"
 
-  echo ">> Build & push: ${repo_name}"
-  docker build -t "${repo_name}" "${service_dir}"
-  docker tag "${repo_name}:latest" "${repo_url}:latest"
-  docker push "${repo_url}:latest"
+  echo ">> Build & push (arm64): ${repo_name}"
+  docker buildx build \
+    --platform linux/arm64 \
+    -t "${repo_url}:latest" \
+    --push \
+    "${service_dir}"
 }
 
 build_and_push "./frontend"                 "frontend"
